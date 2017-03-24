@@ -23,13 +23,15 @@ public class MainScreenScene extends Main {
 
 	Connection conn = SQLConnection.DbConnector();	
 	
+	VBox vBox = new VBox(5);
+	
 	public VBox loadScreenOne() {
 		
 
 		CheckConnection();
 
-		VBox vBox = new VBox(5);
-		vBox.setPrefSize(500, 500);
+		
+		vBox.setPrefSize(250, 300);
 		vBox.setAlignment(Pos.CENTER);
 
 		// IMAGE LOGO
@@ -78,6 +80,10 @@ public class MainScreenScene extends Main {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
+				
+//				LogInScreen test = new LogInScreen();
+//				viewSwimmer.getScene().setRoot(test.loadLogInScreen());
+				
 				ViewCoachesScene test = new ViewCoachesScene();
 				viewCoach.getScene().setRoot(test.loadCoachesScreen());
 			}

@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -41,7 +42,7 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 		TableView<Coach> coachesTable = new TableView<>();
 
 		BorderPane viewCoachesPane = new BorderPane();
-		viewCoachesPane.setPrefSize(1200, 600);
+	
 		
 		Text text = new Text("Screen Coaches");
 		text.setFont(Font.font(30));
@@ -269,7 +270,7 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 		TextField searchFieldCoach = new TextField();
 		searchFieldCoach.setFont(Font.font("San Serif", 15));
 		searchFieldCoach.setPromptText("Filter data");
-		searchFieldCoach.setMaxWidth(920);
+//		searchFieldCoach.setMaxWidth(920);
 
 		FilteredList<Coach> filteredData = new FilteredList<>(data, e -> true);
 		searchFieldCoach.setOnKeyReleased(e -> {
@@ -299,15 +300,15 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 		});
 
 		VBox centeredVBox = new VBox(5);
-		
 		centeredVBox.getChildren().addAll(coachesTable, searchFieldCoach);
 		Group viewCoachesGroup = new Group();
 		viewCoachesGroup.getChildren().addAll(centeredVBox);
+		
 
 
 
-		viewCoachesPane.setCenter(viewCoachesGroup);
-		BorderPane.setAlignment(viewCoachesGroup, Pos.TOP_LEFT);
+		viewCoachesPane.setCenter(centeredVBox);
+		BorderPane.setAlignment(centeredVBox, Pos.TOP_LEFT);
 
 		// Defining textfields for the left side of the scene
 		idCoach = new TextField();
@@ -340,7 +341,7 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 		username.setFont(Font.font("SanSerif", 15));
 		username.setPromptText("Username");
 
-		password = new TextField();
+		password = new PasswordField();
 		password.setPrefSize(150, 20);
 		password.setFont(Font.font("SanSerif", 15));
 		password.setPromptText("Password");
@@ -485,6 +486,10 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 		viewCoachesPane.setLeft(group);
 
 		coachesTable.getSelectionModel().clearSelection();
+		
+		Text club = new Text("PK Viktorija 1906");
+		viewCoachesPane.setBottom(club);
+		BorderPane.setAlignment(club, Pos.CENTER);
 		
 
 		return viewCoachesPane;

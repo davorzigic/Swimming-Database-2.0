@@ -17,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -52,7 +53,7 @@ public class ViewSwimmersScene extends MainScreenScene {
 		TableView<Swimmer> swimmersTable = new TableView<>();
 
 		BorderPane viewSwimmersPane = new BorderPane();
-		viewSwimmersPane.setPrefSize(1200, 600);
+		
 
 		VBox vBox = new VBox(5);
 		vBox.setAlignment(Pos.TOP_CENTER);
@@ -535,7 +536,7 @@ public class ViewSwimmersScene extends MainScreenScene {
 		swimmersTable.getSelectionModel().clearSelection();
 		
 		
-		
+		viewSwimmersPane.setPrefSize(1200, 600 );
 		return viewSwimmersPane;
 
 	}

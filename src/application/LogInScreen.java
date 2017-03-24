@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class LogInScreen extends ViewSwimmersScene{
 	
@@ -26,20 +27,21 @@ public class LogInScreen extends ViewSwimmersScene{
 
 	public BorderPane loadLogInScreen() {
 		
+	
 		BorderPane logInPane = new BorderPane();
 		
 			
 
-//		Color foreground = Color.rgb(255, 255, 255, 0.9);
-//		// Rectangle background
-//		Rectangle background = new Rectangle(320, 250);
-//		background.setX(0);
-//		background.setY(0);
-//		background.setArcHeight(15);
-//		background.setArcWidth(15);
-//		background.setFill(Color.rgb(0, 0, 0, 0.55));
-//		background.setStroke(foreground);
-//		background.setStrokeWidth(1.5);
+		Color foreground = Color.rgb(255, 255, 255, 0.9);
+		// Rectangle background
+		Rectangle background = new Rectangle(320, 250);
+		background.setX(0);
+		background.setY(0);
+		background.setArcHeight(15);
+		background.setArcWidth(15);
+		background.setFill(Color.rgb(0, 0, 0, 0.55));
+		background.setStroke(foreground);
+		background.setStrokeWidth(1.5);
 
 		VBox vbox = new VBox(5);
 		vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -79,7 +81,9 @@ public class LogInScreen extends ViewSwimmersScene{
 
 				if (rs.next()) {
 					// label.setText("Login Successful");
+					//if(stisnut plivac)
 					btn.getScene().setRoot(loadSwimmersScreen());
+					//else(stisnut trener)
 					System.out.println("test");
 				} else {
 					label.setText("Login Failed");
@@ -97,6 +101,8 @@ public class LogInScreen extends ViewSwimmersScene{
 		VBox things = new VBox(5);
 		things.getChildren().addAll(username,password,btn);
 		logInPane.setCenter(things);
+		things.setStyle("-fx-background-color: #000000;");
+		
 		
 		return logInPane;
 	}

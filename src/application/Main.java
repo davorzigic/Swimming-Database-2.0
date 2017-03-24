@@ -1,5 +1,7 @@
 package application;
 	
+import com.sun.javafx.webkit.ThemeClientImpl;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +21,7 @@ import javafx.scene.text.Text;
 public class Main extends Application {
 	
 	
+		
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -28,10 +31,8 @@ public class Main extends Application {
 			
 			
 			MainScreenScene test = new MainScreenScene();
-			Scene scene = new Scene(test.loadScreenOne());
-			primaryStage.setWidth(250);
-			primaryStage.setHeight(300);
-		   
+			Scene scene = new Scene(test.loadScreenOne(),250,300);
+			
 			primaryStage.setScene(scene);
 		    primaryStage.show();
 		    

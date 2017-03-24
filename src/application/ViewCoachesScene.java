@@ -2,10 +2,13 @@ package application;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class ViewCoachesScene extends ViewSwimmersScene {
@@ -38,6 +42,11 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		BorderPane viewCoachesPane = new BorderPane();
 		viewCoachesPane.setPrefSize(1200, 600);
+		
+		Text text = new Text("Screen Coaches");
+		text.setFont(Font.font(30));
+		viewCoachesPane.setTop(text);
+		BorderPane.setAlignment(text, Pos.TOP_CENTER);
 
 		VBox vBox = new VBox(5);
 		vBox.setAlignment(Pos.TOP_CENTER);
@@ -56,73 +65,71 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 			}
 
 		});
-		
+
 		// DELETE BUTTON
-				Button deleteBtn = new Button("Delete");
-				deleteBtn.setPadding(new Insets(5, 5, 5, 5));
-				deleteBtn.setPrefSize(100, 20);
+		Button deleteBtn = new Button("Delete");
+		deleteBtn.setPadding(new Insets(5, 5, 5, 5));
+		deleteBtn.setPrefSize(100, 20);
 
-				deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
+		deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
 
-					@Override
-					public void handle(ActionEvent event) {
-						// TODO Auto-generated method stub
-						Coach selectedItem = coachesTable.getSelectionModel().getSelectedItem();
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				Coach selectedItem = coachesTable.getSelectionModel().getSelectedItem();
 
-						if (selectedItem == null) {
-							Alert noSelectionWarning = new Alert(AlertType.WARNING);
-							noSelectionWarning.setTitle("No Selection");
-							noSelectionWarning.setHeaderText("No Person Selected");
-							noSelectionWarning.setContentText("Please select a person in the table.");
+				if (selectedItem == null) {
+					Alert noSelectionWarning = new Alert(AlertType.WARNING);
+					noSelectionWarning.setTitle("No Selection");
+					noSelectionWarning.setHeaderText("No Person Selected");
+					noSelectionWarning.setContentText("Please select a person in the table.");
 
-							noSelectionWarning.showAndWait();
-						} else {
+					noSelectionWarning.showAndWait();
+				} else {
 
-							Alert deleteConfirmation = new Alert(AlertType.CONFIRMATION);
-							deleteConfirmation.setTitle("Confirmation Dialog");
-							// alert.setHeaderText("Look, a Confirmation Dialog");
-							deleteConfirmation.setContentText("Do you really want to delete selected coach?");
+					Alert deleteConfirmation = new Alert(AlertType.CONFIRMATION);
+					deleteConfirmation.setTitle("Confirmation Dialog");
+					// alert.setHeaderText("Look, a Confirmation Dialog");
+					deleteConfirmation.setContentText("Do you really want to delete selected coach?");
 
-							Optional<ButtonType> result = deleteConfirmation.showAndWait();
-							if (result.get() == ButtonType.OK) {
-								// ... user chose OK
+					Optional<ButtonType> result = deleteConfirmation.showAndWait();
+					if (result.get() == ButtonType.OK) {
+						// ... user chose OK
 
-								try {
-									String query = "DELETE FROM coaches WHERE idCoach = ?";
-									pst = conn.prepareStatement(query);
-									pst.setInt(1, selectedItem.getIdInteger());
-									pst.execute();
-									pst.close();
-								} catch (Exception e3) {
-									// TODO: handle exception
-									e3.printStackTrace();
-								}
-								coachesTable.getItems().remove(selectedItem);
-							} else {
-								// ... user chose CANCEL or closed the dialog
-								deleteConfirmation.close();
-							}
-
-							// Don't select anything after deleting
-							coachesTable.getSelectionModel().clearSelection();
-							System.out.println();
+						try {
+							String query = "DELETE FROM coaches WHERE idCoach = ?";
+							pst = conn.prepareStatement(query);
+							pst.setInt(1, selectedItem.getIdInteger());
+							pst.execute();
+							pst.close();
+						} catch (Exception e3) {
+							// TODO: handle exception
+							e3.printStackTrace();
 						}
+						coachesTable.getItems().remove(selectedItem);
+					} else {
+						// ... user chose CANCEL or closed the dialog
+						deleteConfirmation.close();
 					}
 
-				});
-				
-				VBox rightSideButtons = new VBox(5);
-				rightSideButtons.setPadding(new Insets(10,10,10,10));
-				rightSideButtons.getChildren().addAll(backBtn, deleteBtn);
-				viewCoachesPane.setRight(rightSideButtons);
+					// Don't select anything after deleting
+					coachesTable.getSelectionModel().clearSelection();
+					System.out.println();
+				}
+			}
 
-		
+		});
+
+		VBox rightSideButtons = new VBox(5);
+		rightSideButtons.setPadding(new Insets(10, 10, 10, 10));
+		rightSideButtons.getChildren().addAll(backBtn, deleteBtn);
+		viewCoachesPane.setRight(rightSideButtons);
 
 		// Getting the ID from the database and inserting it into the first
 		// column
 		TableColumn<Coach, Number> column1 = new TableColumn<Coach, Number>("ID");
 		column1.setMinWidth(20);
-		column1.setCellValueFactory(new PropertyValueFactory<Coach, Number>("idSwimmer"));
+		column1.setCellValueFactory(new PropertyValueFactory<Coach, Number>("idCoach"));
 		column1.setCellValueFactory(new Callback<CellDataFeatures<Coach, Number>, ObservableValue<Number>>() {
 			public ObservableValue<Number> call(CellDataFeatures<Coach, Number> u) {
 				// u.getValue() returns the Person instance for a particular
@@ -162,9 +169,9 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		// Getting the DOB from the database and inserting it into the
 		// fourth column
-		TableColumn<Coach, String> column4 = new TableColumn<Coach, String>("DOB");
+		TableColumn<Coach, String> column4 = new TableColumn<Coach, String>("E-mail");
 		column4.setMinWidth(100);
-		column4.setCellValueFactory(new PropertyValueFactory<Coach, String>("DOB"));
+		column4.setCellValueFactory(new PropertyValueFactory<Coach, String>("email"));
 		column4.setCellValueFactory(new Callback<CellDataFeatures<Coach, String>, ObservableValue<String>>() {
 			public ObservableValue<String> call(CellDataFeatures<Coach, String> u) {
 				// u.getValue() returns the User instance for a particular
@@ -176,9 +183,9 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		// Getting the DOB from the database and inserting it into the
 
-		TableColumn<Coach, String> column5 = new TableColumn<Coach, String>("Registration number");
+		TableColumn<Coach, String> column5 = new TableColumn<Coach, String>("Phone number");
 		column5.setMinWidth(100);
-		column5.setCellValueFactory(new PropertyValueFactory<Coach, String>("registrationNumber"));
+		column5.setCellValueFactory(new PropertyValueFactory<Coach, String>("phoneNumber"));
 		column5.setCellValueFactory(new Callback<CellDataFeatures<Coach, String>, ObservableValue<String>>() {
 			public ObservableValue<String> call(CellDataFeatures<Coach, String> u) {
 				// u.getValue() returns the User instance for a particular
@@ -190,9 +197,9 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		// Getting the DOB from the database and inserting it into the
 
-		TableColumn<Coach, String> column6 = new TableColumn<Coach, String>("DOJ");
+		TableColumn<Coach, String> column6 = new TableColumn<Coach, String>("Username");
 		column6.setMinWidth(100);
-		column6.setCellValueFactory(new PropertyValueFactory<Coach, String>("DOJ"));
+		column6.setCellValueFactory(new PropertyValueFactory<Coach, String>("username"));
 		column6.setCellValueFactory(new Callback<CellDataFeatures<Coach, String>, ObservableValue<String>>() {
 			public ObservableValue<String> call(CellDataFeatures<Coach, String> u) {
 				// u.getValue() returns the User instance for a particular
@@ -204,9 +211,9 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		// Getting the DOB from the database and inserting it into the
 
-		TableColumn<Coach, String> column7 = new TableColumn<Coach, String>("Parent Name");
+		TableColumn<Coach, String> column7 = new TableColumn<Coach, String>("Password");
 		column7.setMinWidth(100);
-		column7.setCellValueFactory(new PropertyValueFactory<Coach, String>("parentName"));
+		column7.setCellValueFactory(new PropertyValueFactory<Coach, String>("password"));
 		column7.setCellValueFactory(new Callback<CellDataFeatures<Coach, String>, ObservableValue<String>>() {
 			public ObservableValue<String> call(CellDataFeatures<Coach, String> u) {
 				// u.getValue() returns the User instance for a particular
@@ -218,9 +225,9 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		// Getting the DOB from the database and inserting it into the
 
-		TableColumn<Coach, String> column8 = new TableColumn<Coach, String>("Contact Number");
+		TableColumn<Coach, String> column8 = new TableColumn<Coach, String>("Licence Number");
 		column8.setMinWidth(100);
-		column8.setCellValueFactory(new PropertyValueFactory<Coach, String>("contactNumber"));
+		column8.setCellValueFactory(new PropertyValueFactory<Coach, String>("licenceNumber"));
 		column8.setCellValueFactory(new Callback<CellDataFeatures<Coach, String>, ObservableValue<String>>() {
 			public ObservableValue<String> call(CellDataFeatures<Coach, String> u) {
 				// u.getValue() returns the User instance for a particular
@@ -236,11 +243,6 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		// Sorting button in the table
 		coachesTable.setTableMenuButtonVisible(true);
-
-		VBox vBoxForTable = new VBox();
-		vBoxForTable.getChildren().add(coachesTable);
-		Group viewCoachesGroup = new Group();
-		viewCoachesGroup.getChildren().addAll(vBoxForTable);
 
 		// Filling the table with the data from the database
 		try {
@@ -263,7 +265,49 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 
 		}
 
-		viewCoachesPane.setCenter(vBoxForTable);
+		// FILTER TEXTFIELD
+		TextField searchFieldCoach = new TextField();
+		searchFieldCoach.setFont(Font.font("San Serif", 15));
+		searchFieldCoach.setPromptText("Filter data");
+		searchFieldCoach.setMaxWidth(920);
+
+		FilteredList<Coach> filteredData = new FilteredList<>(data, e -> true);
+		searchFieldCoach.setOnKeyReleased(e -> {
+			searchFieldCoach.textProperty().addListener((observableValue, oldValue, newValue) -> {
+				filteredData.setPredicate((Predicate<? super Coach>) coach -> {
+					if (newValue == null || newValue.isEmpty()) {
+						return true;
+					}
+					String lowerCasеFilter = newValue.toLowerCase();
+					if (coach.getFirstNameString().toLowerCase().contains(lowerCasеFilter)) {
+						return true;
+					} else if (coach.getLastNameString().toLowerCase().contains(lowerCasеFilter)) {
+						return true;
+					} else if (coach.getEmailString().toLowerCase().contains(lowerCasеFilter)) {
+						return true;
+					} else if (coach.getPhoneNumberString().contains(lowerCasеFilter)) {
+						return true;
+					
+					}
+
+					return false;
+				});
+			});
+			SortedList<Coach> sortedData = new SortedList<>(filteredData);
+			sortedData.comparatorProperty().bind(coachesTable.comparatorProperty());
+			coachesTable.setItems(sortedData);
+		});
+
+		VBox centeredVBox = new VBox(5);
+		
+		centeredVBox.getChildren().addAll(coachesTable, searchFieldCoach);
+		Group viewCoachesGroup = new Group();
+		viewCoachesGroup.getChildren().addAll(centeredVBox);
+
+
+
+		viewCoachesPane.setCenter(viewCoachesGroup);
+		BorderPane.setAlignment(viewCoachesGroup, Pos.TOP_LEFT);
 
 		// Defining textfields for the left side of the scene
 		idCoach = new TextField();
@@ -432,19 +476,20 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 		VBox secondRow = new VBox(5);
 		secondRow.getChildren().add(saveButton);
 		secondRow.setPadding(new Insets(0, 10, 10, 10));
-		
-		VBox.setMargin(saveButton, new Insets(370,0,0,0));
-		
+
+		VBox.setMargin(saveButton, new Insets(370, 0, 0, 0));
+
 		Group group = new Group();
-		group.getChildren().addAll(secondRow,firstRow);
-		
+		group.getChildren().addAll(secondRow, firstRow);
+
 		viewCoachesPane.setLeft(group);
-		
+
 		coachesTable.getSelectionModel().clearSelection();
+		
 
 		return viewCoachesPane;
 	}
-	
+
 	/***
 	 * This method clears the fields after pressing the Save button
 	 */
@@ -452,7 +497,8 @@ public class ViewCoachesScene extends ViewSwimmersScene {
 		idCoach.clear();
 		firstName.clear();
 		lastName.clear();
-		email.clear();;
+		email.clear();
+		;
 		phoneNumber.clear();
 		username.clear();
 		password.clear();

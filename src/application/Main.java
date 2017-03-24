@@ -29,6 +29,8 @@ public class Main extends Application {
 			
 			MainScreenScene test = new MainScreenScene();
 			Scene scene = new Scene(test.loadScreenOne());
+			primaryStage.setWidth(250);
+			primaryStage.setHeight(300);
 		   
 			primaryStage.setScene(scene);
 		    primaryStage.show();

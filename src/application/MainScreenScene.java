@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -20,9 +21,10 @@ import javafx.stage.Stage;
 
 public class MainScreenScene extends Main {
 
-	Connection conn = SQLConnection.DbConnector();;
-
+	Connection conn = SQLConnection.DbConnector();	
+	
 	public VBox loadScreenOne() {
+		
 
 		CheckConnection();
 
@@ -58,8 +60,11 @@ public class MainScreenScene extends Main {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				ViewSwimmersScene test = new ViewSwimmersScene();
-				viewSwimmer.getScene().setRoot(test.loadSwimmersScreen());
+				LogInScreen test = new LogInScreen();
+				viewSwimmer.getScene().setRoot(test.loadLogInScreen());
+				
+//				ViewSwimmersScene test = new ViewSwimmersScene();
+//				viewSwimmer.getScene().setRoot(test.loadSwimmersScreen());
 			}
 
 		});

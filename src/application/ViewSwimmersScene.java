@@ -46,6 +46,7 @@ public class ViewSwimmersScene extends MainScreenScene {
 
 	@SuppressWarnings("unchecked")
 	public BorderPane loadSwimmersScreen() {
+		
 
 		final ObservableList<Swimmer> data = FXCollections.observableArrayList();
 		TableView<Swimmer> swimmersTable = new TableView<>();
@@ -488,12 +489,14 @@ public class ViewSwimmersScene extends MainScreenScene {
 		
 		viewSwimmersPane.setLeft(group);
 		
+		// FILTER TEXTFIELD
 		
 		searchField = new TextField();
 		searchField.setFont(Font.font("San Serif", 15));
 		searchField.setPromptText("Filter data");
 		searchField.setMaxWidth(920);
 		
+	
 		FilteredList<Swimmer> filteredData = new FilteredList<>(data, e-> true);
 		searchField.setOnKeyReleased(e -> {
 			searchField.textProperty().addListener((observableValue, oldValue, newValue) -> {
